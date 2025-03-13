@@ -1,65 +1,77 @@
-<div style="margin: 20px;">
-    <h1 class="tit">Catálogo de Productos Tecnológicos</h1>
-  
-    @if (productos.length > 0) {
-      <div class="table-responsive-xxl">
-        <table class="table">
-          <thead>
-            <tr class="table-dark">
-              <th scope="col">ID</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Precio</th>
-              <th scope="col">Categoría</th>
-              <th scope="col">Stock</th>
-              <th scope="col">Seleccionar</th>
-              <th scope="col">Eliminar</th> 
+<div class="container">
+  <h1 class="text-center my-4">Catálogo de Productos Tecnológicos</h1>
+
+  <!-- Tabla de productos -->
+  @if (hayProductos()) {
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (producto of productos; track producto.id) {
+            <tr [ngClass]="{'table-warning': producto.stock < 10}">
+              <td>{{ producto.id }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.precio | currency }}</td>
+              <td>{{ producto.categoria }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>
+                <button type="button" class="btn btn-warning btn-sm me-2" (click)="seleccionarProducto(producto)">Editar</button>
+                <button type="button" class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Eliminar</button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            @for (producto of productos; track producto.id) {
-              <tr class="table-warning">
-                <td>{{producto.id}}</td>
-                <td>{{producto.nombre}}</td>
-                <td>{{producto.precio}}</td>
-                <td>{{producto.categoria}}</td>
-                <td>{{producto.stock}}</td>
-                <td>
-                  <button type="button" class="btn btn-warning" (click)="seleccionarProducto(producto)">SELECCIONAR</button>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-danger" (click)="eliminarProducto(producto.id)">ELIMINAR</button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    } @else {
-      <p>No hay productos disponibles.</p>
-    }
-  
-    <div class="col-sm-4">
-      <p>
-        ID: <input type="text" class="form-control" [(ngModel)]="producto.id" />
-      </p>
-      <p>
-        Nombre: <input type="text" class="form-control" [(ngModel)]="producto.nombre" />
-      </p>
-      <p>
-        Precio: <input type="text" class="form-control" [(ngModel)]="producto.precio" />
-      </p>
-      <p>
-        Categoría: <input type="text" class="form-control" [(ngModel)]="producto.categoria" />
-      </p>
-      <p>
-        Stock: <input type="number" class="form-control" [(ngModel)]="producto.stock" />
-      </p>
-      <p>
-        <button type="button" class="btn btn-primary" (click)="agregarProducto()">Agregar</button>
-        <button type="button" class="btn btn-primary" (click)="modificarProducto()">Modificar</button>
-      </p>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div class="alert alert-warning text-center">
+      No hay productos disponibles.
+    </div>
+  }
+
+  <!-- Formulario para agregar/modificar productos -->
+  <div class="card mt-4">
+    <div class="card-header">
+      {{ producto.id ? 'Editar Producto' : 'Agregar Producto' }}
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="producto.id ? modificarProducto() : agregarProducto()">
+        <div class="mb-3">
+          <label for="id" class="form-label">ID</label>
+          <input type="number" class="form-control" id="id" [(ngModel)]="producto.id" name="id" required>
+        </div>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" [(ngModel)]="producto.nombre" name="nombre" required>
+        </div>
+        <div class="mb-3">
+          <label for="precio" class="form-label">Precio</label>
+          <input type="number" class="form-control" id="precio" [(ngModel)]="producto.precio" name="precio" required>
+        </div>
+        <div class="mb-3">
+          <label for="categoria" class="form-label">Categoría</label>
+          <input type="text" class="form-control" id="categoria" [(ngModel)]="producto.categoria" name="categoria" required>
+        </div>
+        <div class="mb-3">
+          <label for="stock" class="form-label">Stock</label>
+          <input type="number" class="form-control" id="stock" [(ngModel)]="producto.stock" name="stock" required>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">{{ producto.id ? 'Modificar' : 'Agregar' }}</button>
+          <button type="button" class="btn btn-secondary" (click)="resetProducto()">Limpiar</button>
+        </div>
+      </form>
     </div>
   </div>
-  
-  <router-outlet></router-outlet>
-  
+</div>
+
+<router-outlet></router-outlet>

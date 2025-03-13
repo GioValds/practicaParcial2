@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common'; // Importa CommonModule
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, CommonModule], // Agrega CommonModule aquí
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
@@ -66,11 +67,13 @@ export class ProductosComponent {
 
   // Eliminar un producto por ID
   eliminarProducto(id: number): void {
-    this.productos = this.productos.filter(p => p.id !== id);
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+      this.productos = this.productos.filter(p => p.id !== id);
+    }
   }
 
   // Resetear el formulario del producto
-  private resetProducto(): void {
+  resetProducto(): void {
     this.producto = { id: 0, nombre: '', precio: 0, categoria: '', stock: 0 };
   }
 }
