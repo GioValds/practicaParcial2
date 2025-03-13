@@ -1,79 +1,86 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
+import { CommonModule } from '@angular/common';
+import { ProductosService } from '../../services/productos.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, CommonModule], // Agrega CommonModule aquí
+  imports: [RouterOutlet, FormsModule, CommonModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
-export class ProductosComponent {
+export class ProductosComponent implements OnInit {
   title = 'TechStore';
 
   // Propiedad para nuevo producto
-  producto = { id: 0, nombre: '', precio: 0, categoria: '', stock: 0 };
+  producto = { id: '', nombre: '', precio: 0, categoria: '', stock: 0 };
 
-  // Lista de productos tecnológicos
-  productos = [
-    { id: 1, nombre: 'Laptop ASUS', precio: 15000, categoria: 'Computadoras', stock: 10 },
-    { id: 2, nombre: 'Smartphone Samsung', precio: 12000, categoria: 'Celulares', stock: 15 },
-    { id: 3, nombre: 'Tablet iPad', precio: 10500, categoria: 'Tablets', stock: 8 },
-    { id: 4, nombre: 'Monitor LG 27"', precio: 8500, categoria: 'Monitores', stock: 12 },
-    { id: 5, nombre: 'Teclado Mecánico RGB', precio: 2500, categoria: 'Accesorios', stock: 20 },
-  ];
+  // Lista de productos
+  productos: any[] = [];
 
-  // Verifica si hay productos disponibles
-  hayProductos(): boolean {
-    return this.productos.length > 0;
+  constructor(private productosService: ProductosService) {}
+
+  ngOnInit(): void {
+    this.obtenerProductos();
   }
 
-  // Agregar un nuevo producto a la lista
+  // Obtener productos desde Firestore
+  obtenerProductos(): void {
+    this.productosService.obtenerProductos().subscribe((data) => {
+      this.productos = data;
+    });
+  }
+
+  // Agregar un nuevo producto a Firestore
   agregarProducto(): void {
-    if (this.producto.id <= 0) {
-      alert('El ID debe ser mayor a 0.');
-      return;
-    }
-    if (this.productos.some(p => p.id === this.producto.id)) {
-      alert('Ya existe un producto con este ID.');
-      return;
-    }
     if (!this.producto.nombre.trim() || this.producto.precio <= 0 || !this.producto.categoria.trim() || this.producto.stock < 0) {
       alert('Nombre, precio, categoría y stock deben ser válidos.');
       return;
     }
 
-    this.productos.push({ ...this.producto });
-    this.resetProducto();
+    this.productosService.agregarProducto(this.producto).then(() => {
+      alert('Producto agregado correctamente.');
+      this.resetProducto();
+    }).catch((error) => {
+      alert('Error al agregar el producto: ' + error.message);
+    });
   }
 
   // Seleccionar producto para edición
-  seleccionarProducto(productoSeleccionado: { id: number; nombre: string; precio: number; categoria: string; stock: number }): void {
+  seleccionarProducto(productoSeleccionado: any): void {
     this.producto = { ...productoSeleccionado };
   }
 
-  // Modificar un producto existente
+  // Modificar un producto existente en Firestore
   modificarProducto(): void {
-    const index = this.productos.findIndex(p => p.id === this.producto.id);
-    if (index !== -1) {
-      this.productos[index] = { ...this.producto };
-      this.resetProducto();
-    } else {
-      alert('Producto no encontrado.');
+    if (!this.producto.id) {
+      alert('Selecciona un producto para modificar.');
+      return;
     }
+
+    this.productosService.modificarProducto(this.producto.id, this.producto).then(() => {
+      alert('Producto modificado correctamente.');
+      this.resetProducto();
+    }).catch((error) => {
+      alert('Error al modificar el producto: ' + error.message);
+    });
   }
 
-  // Eliminar un producto por ID
-  eliminarProducto(id: number): void {
+  // Eliminar un producto de Firestore
+  eliminarProducto(id: string): void {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
-      this.productos = this.productos.filter(p => p.id !== id);
+      this.productosService.eliminarProducto(id).then(() => {
+        alert('Producto eliminado correctamente.');
+      }).catch((error) => {
+        alert('Error al eliminar el producto: ' + error.message);
+      });
     }
   }
 
   // Resetear el formulario del producto
   resetProducto(): void {
-    this.producto = { id: 0, nombre: '', precio: 0, categoria: '', stock: 0 };
+    this.producto = { id: '', nombre: '', precio: 0, categoria: '', stock: 0 };
   }
 }

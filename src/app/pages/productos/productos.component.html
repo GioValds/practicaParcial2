@@ -1,8 +1,8 @@
 <div class="container">
-  <h1 class="text-center my-4">PracticaParcial1</h1>
+  <h1 class="text-center my-4">Catálogo de Productos Tecnológicos</h1>
 
   <!-- Tabla de productos -->
-  @if (hayProductos()) {
+  @if (productos.length > 0) {
     <div class="table-responsive">
       <table class="table table-hover">
         <thead class="table-dark">
@@ -45,10 +45,6 @@
     </div>
     <div class="card-body">
       <form (ngSubmit)="producto.id ? modificarProducto() : agregarProducto()">
-        <div class="mb-3">
-          <label for="id" class="form-label">ID</label>
-          <input type="number" class="form-control" id="id" [(ngModel)]="producto.id" name="id" required>
-        </div>
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre</label>
           <input type="text" class="form-control" id="nombre" [(ngModel)]="producto.nombre" name="nombre" required>
