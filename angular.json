@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ejemplo6": {
+    "ejemplos2p1": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ejemplo6",
+            "outputPath": "dist/ejemplos2p1",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ejemplo6:build:production"
+              "buildTarget": "ejemplos2p1:build:production"
             },
             "development": {
-              "buildTarget": "ejemplo6:build:development"
+              "buildTarget": "ejemplos2p1:build:development"
             }
           },
           "defaultConfiguration": "development"

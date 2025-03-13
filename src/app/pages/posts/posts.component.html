@@ -1,0 +1,10 @@
+<h3>Posts</h3>
+
+<ul class="list group">
+    @for (post of data; track post.id){
+        <li class="list-group-item">
+            <h5>{{post.title}}</h5>
+            <p>{{post.body}}</p>
+        </li>
+    }
+</ul>

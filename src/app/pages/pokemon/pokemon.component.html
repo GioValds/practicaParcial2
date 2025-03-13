@@ -1,0 +1,13 @@
+<div class="pokemon-container">
+  <h1>Explora los Pokémon</h1>
+  <button class="refresh-button" (click)="refreshPokemon()">¡Nuevos Pokémon!</button>
+
+  <div class="pokemon-grid">
+    <div class="pokemon-card" *ngFor="let pokemon of pokemonList">
+      <img [src]="pokemon.image" [alt]="pokemon.name">
+      <h3>{{ pokemon.name }}</h3>
+      <p><strong>N.º {{ pokemon.id }}</strong></p>
+      <p><strong>Tipo:</strong> {{ pokemon.types }}</p>
+    </div>
+  </div>
+</div>

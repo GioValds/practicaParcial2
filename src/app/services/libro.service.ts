@@ -3,6 +3,7 @@ import { Libro } from '../models/libro.model';
 import { first } from 'rxjs';
 import { addDoc, collection, collectionData, deleteDoc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { doc } from 'firebase/firestore';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +48,17 @@ export class LibroService {
   eliminarLibro(libro:Libro){
     const documentoRef = doc(this.db, 'libros', libro.id);
     deleteDoc(documentoRef);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PostsService {
+
+  constructor(private http: HttpClient) { }
+  //funvion que consume datos de la api externa
+  getPosts(){
+    return this.http.get('https://jsonplaceholder.typicode.com/posts');
   }
 }

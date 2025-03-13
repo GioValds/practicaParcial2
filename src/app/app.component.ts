@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { LibroComponent } from './pages/libro/libro.component';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { MenuComponent } from './pages/menu/menu.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LibroComponent],
+  imports: [RouterOutlet, MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'ejemplo6';
+  title = 'ejemplos2p1';
 }
