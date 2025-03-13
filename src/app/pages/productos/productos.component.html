@@ -1,0 +1,65 @@
+<div style="margin: 20px;">
+    <h1 class="tit">Catálogo de Productos Tecnológicos</h1>
+  
+    @if (productos.length > 0) {
+      <div class="table-responsive-xxl">
+        <table class="table">
+          <thead>
+            <tr class="table-dark">
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Seleccionar</th>
+              <th scope="col">Eliminar</th> 
+            </tr>
+          </thead>
+          <tbody>
+            @for (producto of productos; track producto.id) {
+              <tr class="table-warning">
+                <td>{{producto.id}}</td>
+                <td>{{producto.nombre}}</td>
+                <td>{{producto.precio}}</td>
+                <td>{{producto.categoria}}</td>
+                <td>{{producto.stock}}</td>
+                <td>
+                  <button type="button" class="btn btn-warning" (click)="seleccionarProducto(producto)">SELECCIONAR</button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" (click)="eliminarProducto(producto.id)">ELIMINAR</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p>No hay productos disponibles.</p>
+    }
+  
+    <div class="col-sm-4">
+      <p>
+        ID: <input type="text" class="form-control" [(ngModel)]="producto.id" />
+      </p>
+      <p>
+        Nombre: <input type="text" class="form-control" [(ngModel)]="producto.nombre" />
+      </p>
+      <p>
+        Precio: <input type="text" class="form-control" [(ngModel)]="producto.precio" />
+      </p>
+      <p>
+        Categoría: <input type="text" class="form-control" [(ngModel)]="producto.categoria" />
+      </p>
+      <p>
+        Stock: <input type="number" class="form-control" [(ngModel)]="producto.stock" />
+      </p>
+      <p>
+        <button type="button" class="btn btn-primary" (click)="agregarProducto()">Agregar</button>
+        <button type="button" class="btn btn-primary" (click)="modificarProducto()">Modificar</button>
+      </p>
+    </div>
+  </div>
+  
+  <router-outlet></router-outlet>
+  
